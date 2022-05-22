@@ -1,0 +1,167 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand text-white">Todo App With JWT Auth</a>
+  <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
+    Logout
+  </button>
+</nav>
+
+<!-- <input type="range" class="styled-slider slider-progress" style="width: 25em" /> -->
+
+<div class="card-container">
+  <div class="todos">
+    <!-- submits new todos using 'state' ngModel, with two-way binding 'bannana in a box' tek -->
+    <form
+      *ngIf="!IsEdit && !IsProgress"
+      (submit)="addTodo()"
+      class="submit {{ editDisplay === true ? 'off' : '' }}"
+    >
+      <input
+        type="text"
+        name="inputTodo"
+        placeholder="Enter todo..."
+        class="todo-input"
+        [(ngModel)]="inputTodo"
+        style="width: 101%"
+      />
+      <input type="submit" class="todo-submit" />
+    </form>
+
+    <form *ngIf="IsEdit && !IsProgress">
+      <input
+        type="text"
+        name="inputTodo"
+        placeholder="Enter todo..."
+        class="todo-input"
+        [(ngModel)]="inputTodo"
+      />
+
+      <button
+        (click)="updateTodo(inputTodoId, inputTodo)"
+        class="save"
+        style="margin: 15px; margin-left: 350px"
+      >
+        Save
+      </button>
+
+      <button (click)="CancelEdit()" class="delete">Cancel</button>
+    </form>
+
+    <form class="progressform" *ngIf="IsProgress">
+      <h3 style="margin-left: 340px; margin-bottom: 20px">Set Progress</h3>
+      <input
+        style="margin-left: 290px; width: 30%"
+        type="range"
+        min="0"
+        [attr.max]="100"
+        [value]="progresspercentage"
+        (input)="CalculateProgress($event)"
+      />
+      <p
+        style="
+          color: black;
+          font-weight: 400;
+          margin-left: 400px;
+          font-weight: 900;
+        "
+      >
+        {{ progresspercentage }} %
+      </p>
+
+      <button
+        (click)="updateTodoProgress(inputTodoId, inputTodoprogress)"
+        class="save"
+        style="margin: 15px; margin-left: 360px"
+      >
+        Save
+      </button>
+
+      <button (click)="CancelEdit()" class="delete">Cancel</button>
+    </form>
+
+    <div *ngIf="todos.length == 0">
+      <div class="card">
+        <div>
+          <p style="font-weight: 600">No Items In Todo List</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="todos.length > 0">
+      <div
+        *ngFor="let todo of todos; let i = index"
+        class="todo {{ todo.IsComplete === 'true' ? 'done' : '' }}"
+      >
+        <!-- map content to card -->
+        <div class="card">
+          <div class="id">{{ i + 1 }}</div>
+          <div
+            *ngIf="todo.progressPercentage == 100"
+            style="color: darkgreen"
+            class="todo-content"
+          >
+            <p style="font-weight: 600">
+              {{ todo.todoName }} ({{ todo.TodoStatus }})
+            </p>
+          </div>
+
+          <div
+            *ngIf="todo.progressPercentage < 100 && todo.progressPercentage > 0"
+            class="todo-content"
+          >
+            <p style="font-weight: 600">
+              {{ todo.todoName }} ({{ todo.TodoStatus }})
+            </p>
+          </div>
+
+          <div *ngIf="todo.progressPercentage == 0" class="todo-content">
+            <p style="font-weight: 600; color: red">
+              {{ todo.todoName }} ({{ todo.TodoStatus }})
+            </p>
+          </div>
+
+          <button
+            class="edit {{ showEditButton === true ? '' : 'off' }}"
+            (click)="editTodo(todo.id, todo.todoName)"
+          >
+            Edit
+          </button>
+
+          <button class="delete" (click)="deleteTodo(todo.id)">Remove</button>
+
+          <button
+            class="save"
+            (click)="progressTodo(todo.id, todo.progressPercentage)"
+          >
+            Progress
+          </button>
+
+          <app-share-button
+            *ngIf="todo.progressPercentage == 100"
+            type="twitter"
+            [shareUrl]="todo.TwitterStatus"
+          >
+          </app-share-button>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <div class="todo-buttons">
+      <!-- <button class="populate" (click)="populateList()">
+        Populate Lorem Ipsum
+      </button> -->
+      <div style="margin-left: 10px; font-weight: 800">
+        You have {{ totalpendingtask }} Pending Task
+      </div>
+      <button
+        style="margin-top: -40px; margin-right: 8px"
+        class="delete"
+        id="all"
+        (click)="deleteAll()"
+      >
+        Delete All
+      </button>
+    </div>
+  </div>
+</div>

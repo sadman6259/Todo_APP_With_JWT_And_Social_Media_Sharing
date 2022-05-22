@@ -1,0 +1,13 @@
+.twitter {
+	appearance: none;
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	background: none;
+	background-color:aqua;
+	color: #FFF;
+	padding: 3px 6px;
+	font-weight: 700;
+	transition: all 0.2s ease-in-out;
+	margin-left: 8px;
+}
