@@ -1,0 +1,1 @@
+{"ast":null,"code":"//TodoItems class\nexport class TodoItems {\n  constructor() {\n    this.Id = 0;\n    this.todoName = \"\";\n    this.progressPercentage = 0;\n    this.TodoStatus = \"\";\n    this.TwitterStatus = \"\";\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
